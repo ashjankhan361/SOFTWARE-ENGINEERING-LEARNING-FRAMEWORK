@@ -1,0 +1,352 @@
+
+
+
+import pytest
+import sys
+import os
+sys.path.append('../')
+
+from bs4 import BeautifulSoup
+from se_framework import db, create_app
+from se_framework.models import User
+from werkzeug.security import generate_password_hash
+
+called_once = False
+
+@pytest.fixture
+def client():
+
+    global called_once
+
+    # Initialize the app.
+    app = create_app()
+
+    # Set the app configuration.
+    app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///test_database.sqlite'
+    app.config['TESTING'] = True
+    os.environ["SELF_FRAMEWORK_TESTING"] = "True"
+
+    with app.test_client() as client:
+        with app.app_context():
+
+            db.app = app
+
+            if not called_once:
+                called_once = True
+
+                # Drop all the data.
+                db.drop_all()
+
+                # Create the database dump.
+                db.create_all()
+
+                # Set dummer user data.
+                dummy_user = User(
+                    full_name='Johnny Doe',
+                    username='johnnydoe12',
+                    email='johnnydoe12@pfw.edu',
+                    password=generate_password_hash('123456', method='sha256'),
+                    education_level='1',
+                    phone='123456790',
+                    birthday='October 28, 1997',
+                    profile='static/img/profile.png',
+                    usage_reminder='3 Days',
+                    analytics='{"data":{"labels":["January","February","March","April","May","June","July","August"],"datasets":[{"label":"Student Progress","backgroundColor":"#6D214F","borderColor":"#6D214F","data":[50,35,75,70,95,88,70,95,100]}]},"education":"Graduate","most_played":"quiz","achievements":[]}'
+                )
+
+                # Add the dummy user to the database.
+                db.session.add(dummy_user)
+
+                db.session.commit()
+
+
+        yield client
+
+def get_response(client, path, method='GET', data={}):
+    resp = None
+
+    if method == 'GET':
+        resp = client.get(path) # get_content(clipath)
+    elif method == 'POST':
+        resp = client.post(path, data=data, follow_redirects=True)
+
+    return resp
+
+def get_soup(client, path, method='GET'):
+    """
+    Returns the object of the BeautifulSoup
+    """
+
+    resp = get_response(client, path, method)
+    return BeautifulSoup(resp.data, 'lxml')
+
+def test_login_form_exists(client):
+    """
+    Test whether the login form exists.
+    """
+
+    soup = get_soup(client, '/')
+
+    assert soup.find('form', {'action': '/login'}) != None
+
+def test_signup_form_exists(client):
+    """
+    Test whether the signup form exists.
+    """
+
+    soup = get_soup(client, '/signup')
+
+    assert soup.find('form', {'action': '/signup'}) != None
+
+def signup(client, full_name, username, email, password, c_password, education_level, get_soup=True):
+    """
+    Submits the signup form.
+    """
+
+    data = {
+        'full_name': full_name,
+        'username': username,
+        'email': email,
+        'password': password,
+        'c_password': c_password,
+        'education_level': education_level
+    }
+
+    resp = get_response(client, '/signup', method='POST', data=data)
+
+    if get_soup:
+        return BeautifulSoup(resp.data, 'lxml')
+
+    return resp
+
+def login(client, email, password, get_soup=True):
+    """
+    Submits the signup form.
+    """
+
+    data = {
+        'email': email,
+        'password': password
+    }
+
+    resp = get_response(client, '/login', method='POST', data=data)
+
+    if get_soup:
+        return BeautifulSoup(resp.data, 'lxml')
+
+    return resp
+
+def test_signup_with_empty_data(client):
+    """
+    Tests with empty data.
+    """
+
+    soup = signup(client, '', '', '', '', '', '')
+
+    msg = soup.find('div', {'class': 'alert alert-danger'})
+    assert msg != None
+    assert msg.get_text().strip() == 'Some fields are empty.'
+
+def test_signup_different_password(client):
+    """
+    Tests the signup with different password.
+    """
+
+    soup = signup(client, 'John Doe', 'johndoe', 'johndoe@pfw.edu', '1234', '123456', '1')
+    msg = soup.find('div', {'class': 'alert alert-danger'})
+
+    assert msg != None
+    assert msg.get_text().strip() == 'Password doesn\'t match.'
+
+def test_signup_with_data(client):
+    """
+    Tests with some data.
+    """
+
+    soup = signup(client, 'John Doe', 'johndoe12', 'johndoe12@pfw.edu', '1234', '1234', '1')
+
+    login = soup.find('form', {'action': '/login'})
+
+    assert login != None
+
+def test_signup_with_same_data(client):
+    """
+    Tests the signup with already existing user.
+    """
+
+    soup = signup(client, 'John Doe', 'johndoe12', 'johndoe12@pfw.edu', '1234', '1234', '1')
+
+    login = soup.find('form', {'action': '/login'})
+
+    assert login == None
+
+def test_signup_with_existing_username(client):
+    """
+    Tests the signup with already existing username.
+    """
+
+    soup = signup(client, 'John Doe', 'johndoe12', 'johndoe125@pfw.edu', '1234', '1234', '1')
+
+    msg = soup.find('div', {'class': 'alert alert-danger'})
+
+    assert msg != None
+    assert msg.get_text().strip() == 'Username already exists.'
+
+def test_signup_with_existing_email(client):
+    """
+    Tests the signup with already existing email.
+    """
+
+    soup = signup(client, 'John Doe', 'johndoe1', 'johndoe12@pfw.edu', '1234', '1234', '1')
+
+    msg = soup.find('div', {'class': 'alert alert-danger'})
+
+    assert msg != None
+    assert msg.get_text().strip() == 'Email address already exists'
+
+def test_login_with_incorrect_credentials(client):
+
+    """
+    Tests the login with incorrect credentials.
+    """
+
+    soup = login(client, 'johndoe@pfw.edu', '12345')
+
+    msg = soup.find('div', {'class': 'alert alert-danger'})
+
+    assert msg != None
+    assert msg.get_text().strip() == 'Incorrect Email/Password combination.'
+
+def test_login_with_correct_credentials(client):
+
+    """
+    Tests the login with correct credentials.
+    """
+
+    soup = login(client, 'johnnydoe12@pfw.edu', '123456')
+
+    dashboard_anchor = soup.find('a', {'href': '/dashboard'})
+    analytics_anchor = soup.find('a', {'href': '/analytics'})
+
+
+    assert dashboard_anchor != None
+    assert analytics_anchor != None
+
+def test_userdetails_exist_onanalyticspage(client):
+
+    response = login(client, 'johnnydoe12@pfw.edu', '123456', get_soup=False)
+    soup_analytics = get_soup(client, '/analytics')
+
+    user_data_divs = soup_analytics.find("div", {"class": "user-data"})
+
+    assert user_data_divs != None
+
+
+def test_timeline_exists_on_analytics_page(client):
+
+    """
+    Tests the timeline's existence on analytics page
+    """
+
+    response = login(client, 'johnnydoe12@pfw.edu', '123456', get_soup=False)
+    soup_analytics = get_soup(client, '/analytics')
+
+    timeline_anchor = soup_analytics.find('canvas', {"class": 'line_chart'})
+
+    assert timeline_anchor is not None
+
+
+def test_analytics_tiledata_is_present(client):
+
+    """
+    Tests the analytics data existence on analytics page
+    """
+
+    response = login(client, 'johnnydoe12@pfw.edu', '123456', get_soup=False)
+    soup_analytics = get_soup(client, '/analytics')
+    chartspans = soup_analytics.findAll('div', {'class' : 'center-div'})
+
+    assert len(chartspans) == 3, "user isnt logged in"
+
+
+def test_dashboard_has_about_section(client):
+
+    """
+    Tests the about self section existence on dashboard page
+    """
+
+    response = login(client, 'johnnydoe12@pfw.edu', '123456', get_soup=False)
+    soup_dash = get_soup(client, '/dashboard')
+    About_section = soup_dash.find('h1', {'class': 'display-4'})
+
+    assert About_section != None
+
+def test_dashboard_input_education_rowexist(client):
+
+    """
+    Tests the education input existence on dashboard page
+    """
+
+    response = login(client, 'johnnydoe12@pfw.edu', '123456', get_soup=False)
+    soup_dash = get_soup(client, '/dashboard')
+    education_tag = soup_dash.find_all(attrs={"name" : "education_level"})
+
+    assert education_tag != None
+
+
+def test_dashboard_input_gamemode_rowexist(client):
+
+    """
+    Tests the gamemode input existence on dashboard page
+    """
+
+    response = login(client, 'johnnydoe12@pfw.edu', '123456', get_soup=False)
+    soup_dash = get_soup(client, '/dashboard')
+    gamemode_tag = soup_dash.find_all(attrs={"name" : "game_mode"})
+
+    assert gamemode_tag != None
+
+
+def test_dashboard_input_gametype_rowexist(client):
+
+    """
+    Tests the gametype input existence on dashboard page
+    """
+
+    response = login(client, 'johnnydoe12@pfw.edu', '123456', get_soup=False)
+    soup_dash = get_soup(client, '/dashboard')
+    gametype_tag = soup_dash.find_all(attrs={"name" : "game_type"})
+
+    assert gametype_tag != None
+
+def test_dashboard_navigation_is_right(client):
+
+    """
+    Tests if the user has right links to logout and to move to analytics from dashboard page
+    """
+
+    response = login(client, 'johnnydoe12@pfw.edu', '123456', get_soup=False)
+    soup_dash = get_soup(client, '/dashboard')
+
+    logout_anchor = soup_dash.find('a', {'href': '/logout'})
+    analytics_anchor = soup_dash.find('a', {'href': '/analytics'})
+
+
+    assert logout_anchor != None
+    assert analytics_anchor != None
+
+def test_analytics_navigation_is_right(client):
+
+    """
+    Tests if the user has right links to logout and to move to dashboard from analytics page
+    """
+
+    response = login(client, 'johnnydoe12@pfw.edu', '123456', get_soup=False)
+    soup_chart = get_soup(client, '/analytics')
+
+    logout_anchor = soup_chart.find('a', {'href': '/logout'})
+    dashboard_anchor = soup_chart.find('a', {'href': '/dashboard'})
+
+
+    assert logout_anchor != None
+    assert dashboard_anchor != None
