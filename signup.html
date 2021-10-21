@@ -1,0 +1,122 @@
+{% extends "base.html" %}
+
+{% block title %}Sign Up | SELF Framework{% endblock %}
+{% block sidebar %}
+<!-- Sidebar with Login message if existing user. -->
+<div class="se-whitespace-2"></div>
+<div class="se-vcenter login-msg" style="padding: 30px;">
+    <h1 class="display-4">Welcome Back!</h1>
+    <h4>Create an account with your student email.</h4>
+    <div class="se-whitespace-1"></div>
+    <span class="new-account" style="margin-top: 40px;">
+        <p style="display: inline-block;">Already have an account?</p><a href="{{ url_for('main.index') }}" style="margin-left: 10px; text-decoration: underline; display: inline-block;" class="text-white">Login</a>
+    </span>
+</div>
+{% endblock %}
+{% block content %}
+<!-- <div class="se-vcenter"> -->
+<div class="block-content">
+    <div class="negative-space"></div>
+    <h1>Create an account</h1>
+    <div class="se-whitespace-1"></div>
+    <!-- Error messages section. -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ messages[0] }}
+        </div>
+    {% endif %}
+    {% endwith %}
+    <form action="/signup" method="POST">
+        <!-- Full name field -->
+        <div class="form-group">
+            <div class="input-group mb-3 input-group-lg">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+
+                <input type="text" class="form-control form-control-lg" id="full_name" placeholder="Full Name" name="full_name" required/>
+            </div>
+        </div>
+        <!-- Username field -->
+        <div class="form-group">
+            <div class="input-group mb-3 input-group-lg">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-user"></i>
+                    </div>
+                </div>
+
+                <input type="text" class="form-control form-control-lg" id="username" placeholder="Username" name="username" required/>
+            </div>
+        </div>
+
+        <!-- Email field -->
+        <div class="form-group">
+            <div class="input-group mb-3 input-group-lg">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+
+                <input type="email" class="form-control form-control-lg" id="email" placeholder="Email Address" name="email" required/>
+            </div>
+        </div>
+
+        <!-- Password field -->
+        <div class="form-group">
+            <div class="input-group mb-3 input-group-lg">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+
+                <input type="password" class="form-control form-control-lg" id="password" placeholder="Password" name="password" required/>
+            </div>
+        </div>
+
+        <!-- Confirm Password field -->
+        <div class="form-group">
+            <div class="input-group mb-3 input-group-lg">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+
+                <input type="password" class="form-control form-control-lg" id="c_password" placeholder="Confirm Password" name="c_password" required/>
+            </div>
+        </div>
+
+        <!-- Education Level dropdown list -->
+        <div class="form-group">
+            <div class="input-group mb-3 input-group-lg">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-graduation-cap"></i>
+                    </div>
+                </div>
+
+                <select name="education_level" class="form-control custom-select">
+                    <option value="0" selected>Education Level</option>
+                    <option value="1">Freshman</option>
+                    <option value="2">Sophomere</option>
+                    <option value="3">Junior</option>
+                    <option value="4">Senior</option>
+                    <option value="5">Graduate</option>
+                </select>
+            </div>
+        </div>
+        <!-- Signup button -->
+        <button type="submit" class="se-btn btn btn-primary">Sign Up</button>
+    </form>
+    <div class="se-whitespace-1"></div>
+    <!-- Social Links view. -->
+    {% include "social_links.html" %}
+    <div class="negative-space"></div>
+</div>
+{% endblock %}

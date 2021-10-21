@@ -1,0 +1,29 @@
+<nav class="se-navbar navbar navbar-expand-md" id="se-navbar">
+    <!-- Navigation Brand name -->
+    <a class="navbar-brand text-white" href="{{ url_for('main.index') }}">
+        <i class="h3 fas fa-graduation-cap"></i>
+        <p>SELF Framework</p>
+    </a>
+
+    <!-- Hamburger menu button for the small devices. -->
+    <button style="color: #fff;" class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+        <span class="fas fa-bars"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="collapsibleNavbar">
+
+        <!-- List of navigation links with view on access type. -->
+        <ul class="navbar-nav ml-auto">
+            {% if current_user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link se-nav-link" href="{{ url_for('auth.dashboard') }}">Dashboard</a></li>
+                <li class="nav-item"><a class="nav-link se-nav-link" href="{{ url_for('auth.analytics') }}">Analytics</a></li>
+            {% endif %}
+            {% if not current_user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link se-nav-link" href="{{ url_for('main.index') }}">Home</a></li>
+                <li class="nav-item"><a class="nav-link se-nav-link" href="{{ url_for('auth.signup') }}">Signup</a></li>
+            {% endif %}
+            {% if current_user.is_authenticated %}
+                <li class="nav-item"><a class="nav-link se-nav-link" href="{{ url_for('auth.logout') }}">Logout</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</nav>

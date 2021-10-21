@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Home | SELF Framework{% endblock %}
+{% block sidebar %}
+<!-- Sidebar with create an account message if new to website -->
+<div class="se-whitespace-2"></div>
+<div class="se-vcenter login-msg" style="padding: 30px;">
+    <h1 class="display-4">Welcome Back!</h1>
+    <h4>Sign in to access your student account.</h4>
+    <div class="se-whitespace-1"></div>
+    <span class="new-account" style="margin-top: 40px;">
+        <p style="display: inline-block;">New to website?</p><a href="{{ url_for('auth.signup') }}" style="margin-left: 10px; text-decoration: underline; display: inline-block;" class="text-white">Create an account</a>
+    </span>
+</div>
+{% endblock %}
+{% block content %}
+<div class="block-content">
+    <div class="negative-space"></div>
+    <h2>Sign In to your account</h2>
+    <div class="se-whitespace-1"></div>
+
+    <!-- Error messages section. -->
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+        <div class="alert alert-danger" role="alert">
+            {{ messages[0] }}
+        </div>
+    {% endif %}
+    {% endwith %}
+    <form method="POST" action="/login">
+        <!-- Email field -->
+        <div class="form-group">
+            <div class="input-group mb-3 input-group-lg">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-envelope"></i>
+                    </div>
+                </div>
+
+                <input type="email" class="form-control form-control-lg" id="email" placeholder="Email Address/Username" name="email">
+            </div>
+        </div>
+
+        <!-- Password field -->
+        <div class="form-group">
+            <div class="input-group mb-3 input-group-lg">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <i class="fas fa-lock"></i>
+                    </div>
+                </div>
+
+                <input type="password" class="form-control form-control-lg" id="password" placeholder="Password" name="password">
+            </div>
+        </div>
+
+        <!-- Login button -->
+        <div class="form-group form-check">
+            <label class="form-check-label">
+            <input class="form-check-input" type="checkbox" name="remember"> Remember me
+            </label>
+        </div>
+        <button type="submit" class="se-btn btn btn-primary">Login</button>
+    </form>
+    <div class="se-whitespace-1"></div>
+    <!-- Social Links view. -->
+    {% include "social_links.html" %}
+    <div class="negative-space"></div>
+    <div class="negative-space"></div>
+</div>
+{% endblock %}

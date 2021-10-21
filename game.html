@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Start Game | SELF Framework{% endblock %}
+{% block sidebar %}
+<!-- Sidebar with start game message -->
+<div class="se-whitespace-2"></div>
+<div class="se-vcenter login-msg" style="padding: 30px;">
+    <h1 class="display-4">Start Game</h1>
+</div>
+{% endblock %}
+{% block content %}
+<!-- Display the selected options -->
+<div class="block-content">
+    <div class="negative-space"></div>
+    <div class="container">
+        <h1>Game Options:</h1>
+        <h3>Education Level: <small>{{ options['education_level'][request.args.get('education_level')] }}</small></h3>
+        <h3>Game Experience: <small>{{ options['game_experience'][request.args.get('game_type')] }}</small></h3>
+        <h3>Game Mode: <small>{{ options['game_mode'][request.args.get('game_mode')] }}</small></h3>
+    </div>
+    <div class="negative-space"></div>
+    <div class="negative-space"></div>
+    <div class="negative-space"></div>
+</div>
+{% endblock %}

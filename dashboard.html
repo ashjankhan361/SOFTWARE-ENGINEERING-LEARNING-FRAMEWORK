@@ -1,0 +1,133 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | SELF Framework{% endblock %}
+{% block sidebar %}
+<!-- Sidebar with about details of the Web App -->
+<div class="se-whitespace-2"></div>
+<div class="se-vcenter login-msg" style="padding: 30px;">
+    <h1 class="display-4">About</h1>
+    <h6 style="letter-spacing: 1px; text-align: left; padding: 0 15%;">Software Engineering Learning Framework (SELF) purpose is to teach the student about new techniques in software engineering and develop their skill in development and analysis. This web app also provide an easy access application to the knowledge about software engineering and SDLC that could be beneficial to the user.</h6>
+</div>
+{% endblock %}
+{% block content %}
+<div class="block-content">
+    <div class="negative-space"></div>
+        <h1>Education</h1>
+        <form action="{{ url_for('auth.game') }}" method="GET" class="education">
+            <!-- Education Level view -->
+            <div class="container">
+                <p>Please select your current education level that you would like to proceed with:</p>
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input dashboard-option" value="1" name="education_level" checked="checked" />
+                                    <div class="center-div">
+                                        <span>Secondary</span>
+                                    </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input dashboard-option" value="2" name="education_level" />
+                                    <div class="center-div">
+                                        <span>Undergraduate</span>
+                                    </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input dashboard-option" value="3" name="education_level" />
+                                    <div class="center-div">
+                                        <span>Graduate</span>
+                                    </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="se-whitespace-1"></div>
+            <div class="container">
+                <p>Please select the game experience you want:</p>
+
+                <!-- Game Experience view -->
+                <div class="row" style="text-align: center;">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input dashboard-option" value="1" name="game_type" />
+                                    <div class="center-div">
+                                        <span>Experiential Learning</span>
+                                    </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input dashboard-option" value="2" name="game_type" checked="checked" />
+                                    <div class="center-div">
+                                        <span>2D</span>
+                                    </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input dashboard-option" value="3" name="game_type" />
+                                    <div class="center-div">
+                                        <span>Quiz</span>
+                                    </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="se-whitespace-1"></div>
+            <div class="container">
+                <p>Please select the game mode:</p>
+
+                <!-- Game Mode view -->
+                <div class="row" style="text-align: center;">
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input dashboard-option" value="1" name="game_mode" checked="checked" />
+                                    <div class="center-div">
+                                        <span>Single Player</span>
+                                    </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="form-check">
+                            <label class="form-check-label">
+                                <input type="radio" class="form-check-input dashboard-option" value="2" name="game_mode" />
+                                    <div class="center-div">
+                                        <span>Multi-player</span>
+                                    </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <div class="" style="padding: 60px 15px;">
+                <!-- Start Button -->
+                <button type="submit" class="se-btn btn btn-primary" style="text-transform: none;">Start &#8594;</button>
+            </div>
+        </form>
+    <div class="negative-space"></div>
+</div>
+{% endblock %}

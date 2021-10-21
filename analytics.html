@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics | SELF Framework{% endblock %}
+{% block sidebar %}
+<div class="se-whitespace-2"></div>
+    <div class="container user-data" style="color: white; ">
+        <!-- Profile and Full Name View -->
+        <div class="row" >
+            <div class="col-md-1"></div>
+            <div class="col-md-5">
+                <div style="margin: 0 auto; height: 150px; width: 150px; border-radius: 50px; background-color: white; background-position: center; background-size: contain; background-image: url('{{  current_user.profile  }}');">
+                    <i class="fas fa-edit" style="position: relative; float: right; top: 20px; color: #212a35; right: 15px;"></i></div>
+            </div>
+            <div class="col-md-5">
+                <div class="user-fullname"><h2>{{ current_user.full_name }}</h2></div>
+            </div>
+            <div class="col-md-1"></div>
+        </div>
+        <div style="padding: 10px;"></div>
+
+        <!-- Full Name View -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7" style="padding-left: 20px;">
+                <div class="user-info">
+                    <p class="font-weight-bold">Full Name</p>
+                    <p>{{ current_user.full_name }}</p>
+                </div>
+                <i class="user-info-edit fas fa-edit"></i>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        <!-- Phone View -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7" style="padding-left: 20px;">
+                <div class="user-info">
+                    <p class="font-weight-bold">Phone</p>
+                    {% if current_user.phone %}
+                        <p>{{ current_user.phone }}</p>
+                    {% else %}
+                        <p>No data available.</p>
+                    {% endif %}
+                </div>
+                <i class="user-info-edit fas fa-edit"></i>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        <!-- Email View -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7" style="padding-left: 20px;">
+                <div class="user-info">
+                    <p class="font-weight-bold">Email</p>
+                    <p>{{ current_user.email }}</p>
+                </div>
+                <i class="user-info-edit fas fa-edit"></i>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        <!-- Birthday View -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7" style="padding-left: 20px;">
+                <div class="user-info">
+                    <p class="font-weight-bold">Birthday</p>
+                    {% if current_user.birthday %}
+                        <p>{{ current_user.birthday }}</p>
+                    {% else %}
+                        <p>No data available.</p>
+                    {% endif %}
+                </div>
+                <i class="user-info-edit fas fa-edit"></i>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        <!-- Education level View -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7" style="padding-left: 20px;">
+                <div class="user-info">
+                    <p class="font-weight-bold">Education</p>
+                    <p>{{ options['education_level'][current_user.education_level] }}</p>
+                </div>
+                <i class="user-info-edit fas fa-edit"></i>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        <!-- Usage Reminder View -->
+        <div class="row">
+            <div class="col-md-2"></div>
+            <div class="col-md-7" style="padding-left: 20px;">
+                <div class="user-info">
+                    <p class="font-weight-bold">Usage Reminder</p>
+                    {% if current_user.usage_reminder %}
+                        <p>{{ current_user.usage_reminder }}</p>
+                    {% else %}
+                        <p>No data available.</p>
+                    {% endif %}
+                </div>
+                <i class="user-info-edit fas fa-edit"></i>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+    </div>
+{% endblock %}
+{% block content %}
+<div class="block-content">
+    <div class="negative-space"></div>
+        <h1 style="font-weight: normal; font-size: 2vw;">Timeline</h1>
+        <div class="padding: 25px;"></div>
+        <canvas id="line_chart" class="line_chart"></canvas>
+        <script type="text/javascript">
+            // Get the analytics as JSON object.
+            var analytics = JSON.parse('{{ current_user.analytics|safe }}');
+
+            // Render the analytics.
+            showAnalytics(analytics);
+        </script>
+
+        <div class="se-whitespace-1"></div>
+
+        <div class="container-fluid">
+            <!-- View more data on the analytics. -->
+            <div class="row" style="text-align: center;">
+                <div class="col-md-4">
+                    <div class="center-div">
+                        <span>Education: {{ data['education'] }}</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="center-div">
+                        <span>Most played game: {{ data['most_played'] }}</span>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="center-div">
+                        <span>Achievements: {% if data['achievements']|length < 1 %}None{% endif %}</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    <div class="se-whitespace-1"></div>
+    <div class="negative-space"></div>
+</div>
+{% endblock %}
