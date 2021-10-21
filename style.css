@@ -1,0 +1,268 @@
+
+html, body {
+    height: 100%;
+}
+
+.container-fluid {
+    padding-left: 0;
+    padding-right: 0;
+    height: 100%;
+}
+
+.se-fullpage {
+    background-color: #fff;
+}
+
+.row, .se-sidebar {
+}
+
+.se-whitespace-1 {
+    padding: 20pt 0;
+}
+
+.se-whitespace-2 {
+    padding: 40pt 0;
+}
+
+.se-container {
+    margin-right: 0px;
+    margin-left: 0px;
+}
+
+.se-sidebar {
+    background: #6D214F;
+}
+
+.se-icon {
+    padding: 0.5rem;
+    font-size: 1.5rem;
+    border-radius: 50px;
+    /*background: #6D214F;*/
+    color: #6D214F;
+    margin-left: 2pt;
+}
+
+.se-header-icon {
+    color: #fff;
+}
+
+.se-main-logo, .se-title {
+    font-size: 32pt;
+    color: #fff;
+}
+
+.navbar-brand {
+    font-family: 'Lato', sans-serif;
+    font-weight: 700;
+    letter-spacing: 3px;
+    padding-top: 15px;
+    padding-left: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+}
+
+.se-main-logo {
+    font-size: 32pt;
+}
+
+.se-main-container {
+    margin-right: 0;
+}
+
+.se-navbar {
+    background-color: transparent;
+    padding: 20px;
+    z-index: 999;
+}
+
+.login-msg {
+    color: #fff;
+    font-family: 'Lato', sans-serif;
+    text-align: center;
+}
+
+.se-vcenter {
+    width: 100%;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+.form-control {
+    font-size: 13pt;
+    outline: none;
+    border-left-color: transparent;
+    padding: 2rem 1rem;
+}
+
+.form-control:focus {
+    box-shadow: none;
+    outline: none;
+}
+
+.se-btn {
+    width: 100%;
+    background-color: #6D214F;
+    border-color: #6D214F;
+    letter-spacing: 1px;
+    padding: 10px 0;
+    text-transform: uppercase;
+}
+
+.se-btn:hover {
+    background-color: #6D214F;
+    border-color: #6D214F;
+}
+
+.input-group-text {
+    background-color: transparent;
+    border-right-color: transparent;
+}
+
+.se-nav-link {
+    color: #6D214F;
+    margin-right: 25pt;
+    font-weight: bold;
+}
+
+.se-nav-link:hover {
+    color: #6D214F;
+    border-bottom: 1px solid #6D214F;
+}
+
+.se-social-links {
+    list-style-type: none;
+    padding-left: 0;
+}
+
+.se-social-links li {
+    display: inline-block;
+}
+
+.navbar-brand p {
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    font-size: medium;
+    margin-left: 10px;
+}
+
+.negative-space {
+    padding: 100px 0;
+}
+
+input:focus {
+    border-color: rgb(118, 118, 118);
+    outline: none;
+}
+
+
+/**
+ * Dashboard
+ */
+.center-div {
+    cursor: pointer;
+    /*min-width: 180px;*/
+    width: 100%;
+    background-color: #f1f1f1;
+    text-align: center;
+    display: inline-block;
+    border-radius: 5px;
+    padding: 30px 5px;
+}
+.center-div a {
+    line-height: 1.5;
+    display: inline-block;
+    vertical-align: middle;
+    text-decoration: none;
+    color: #212a35;
+    font-size: 12pt;
+    font-weight: bold;
+}
+.center-div.active {
+    background-color: #6D214F;
+}
+.center-div.active a {
+    color: #fff;
+}
+
+.dashboard-option {
+    display: none;
+}
+
+.center-div span {
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: bold;
+}
+
+.dashboard-option:checked + .center-div {
+    background-color: #6D214F;
+    color: #fff;
+}
+
+.education p {
+    font-size: 0.9rem;
+}
+
+.education .form-check-label {
+    width: 100%;
+}
+
+.education .col-md-4 {
+    padding-left: 0px;
+    padding-right: 0px;
+}
+
+.user-fullname {
+    padding: 60px 0;
+}
+
+.user-info {
+    display: inline-block;
+}
+
+.user-info-edit {
+    display: inline-block;
+    float: right;
+}
+
+@media only screen and (max-width: 768px) {
+    .user-fullname {
+        padding: 40px 0;
+        text-align: center;
+    }
+
+    #se-navbar {
+        background-color: #6D214F;
+    }
+
+    .se-navbar li a {
+        text-align: center;
+        color: #fff;
+    }
+
+    .navbar-brand {
+        padding-top: 5px;
+        padding-left: 10px;
+    }
+
+    .navbar-brand p {
+        margin-left: 5px;
+    }
+
+    .negative-space {
+        padding: 50px 0;
+    }
+
+    .block-content h1 {
+        text-align: center;
+    }
+
+    .user-data p {
+        text-align: center;
+    }
+}
